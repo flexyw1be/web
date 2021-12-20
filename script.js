@@ -1,6 +1,10 @@
 const gameBoard = document.getElementById("gameBoard")
 const racket = document.getElementById("racket")
 const ball = document.getElementById("ball")
+const rect1 = document.getElementById("rect1")
+const rect2 = document.getElementById("rect2")
+
+let rects = [rect1, rect2]
 
 var racketObj = new(Object) 
 
@@ -14,6 +18,8 @@ ballObj.X = ball.offsetLeft
 ballObj.Y = ball.offsetTop
 ballObj.dX = 1
 ballObj.dY = 1
+
+
 
 
 function onArrowKeyDown(ev) {
@@ -46,10 +52,27 @@ function moveBall() {
       ballObj.dX = -ballObj.dX}
    if(racketObj.X <=ballObj.X && 
       racketObj.L + racketObj.X > ballObj.X
-      && ballObj.Y + ball.clientHeight == racketObj.Y){
+      && ballObj.Y + ball.clientHeight == racketObj.Y && ballObj.dY >0){
          ballObj.dY = - ballObj.dY
    }
-
+   for(var i =0; i < 2; i++){
+      rect = rects[i]
+      if (rect.offsetLeft <=ballObj.X &&
+         rect.clientWidth + rect.offsetLeft > ballObj.X
+         && ballObj.Y + ball.clientHeight == rect.offsetTop && ballObj.dY >0){
+            ballObj.dY = - ballObj.dY}
+      else if(rect.offsetTop + 40 == ballObj.Y && 
+         rect.offsetLeft <=ballObj.X &&
+         rect.clientWidth + rect.offsetLeft > ballObj.X && ballObj.dY <0){
+            ballObj.dY = - ballObj.dY}
+      if(rect.offsetLeft == ballObj.X + 40 && 
+         rect.offsetTop + 40 > ballObj.Y &&  ballObj.Y > rect.offsetTop - 40  && ballObj.dX>0){
+         ballObj.dX = -ballObj.dX}
+      else if (rect.offsetLeft + 200 == ballObj.X && 
+         rect.offsetTop + 40 > ballObj.Y &&  ballObj.Y > rect.offsetTop - 40  && ballObj.dX<0){
+         ballObj.dX = -ballObj.dX}
+   }
+   
    
    window.requestAnimationFrame(moveBall)
 }
